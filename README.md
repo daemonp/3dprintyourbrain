@@ -42,10 +42,27 @@ Assuming that you have your structural image in NIfTI format, run the following 
 ```bash
 mkdir -p $SUBJECTS_DIR/${subject}/mri/orig
 mri_convert ${subjT1} $SUBJECTS_DIR/${subject}/mri/orig/001.mgz
-recon-all -subjid ${subject} -all -time -log logfile -nuintensitycor-3T -sd $SUBJECTS_DIR
+recon-all -openmp 32 -subjid ${subject} -all -time -log logfile -nuintensitycor-3T -sd $SUBJECTS_DIR
 ```
 
 **Note:** This step might take some time. Between 6-18h. If you want to run ``recon-all`` in parallel and speed-up the whole process, add `` -openmp N`` to the end of the ``recon-all`` command, where ``N`` stands for the number of CPUs to use.
+
+### Improving model with T2 
+
+If you have T2 or T2 FLAIR data you can suppliment the model [using T2 or FLAIR data to improve pial surfaces](https://surfer.nmr.mgh.harvard.edu/fswiki/recon-all#UsingT2orFLAIRdatatoimprovepialsurfaces)
+
+```
+recon-all -subject full \
+  -i T1_AXIAL_PRE_20101021132605_4.nii.gz \
+  -T2 T2_AXIAL_RESTORE_20101021132605_3.nii.gz \
+  -FLAIR FLAIR_AXIAL_20101021132605_5.nii.gz \
+  -T2pial -all
+```
+
+Adding to an existing model:
+```
+recon-all -openmp 32 -subject ${subject} -T2 T2_AXIAL_RESTORE_20101021132605_3.nii.gz -T2pial -autorecon3
+```
 
 
 ## Step 3 - Create 3D Model of Cortical Areas
