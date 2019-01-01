@@ -53,10 +53,10 @@ If you have T2 or T2 FLAIR data you can suppliment the model [using T2 or FLAIR 
 
 ```
 recon-all -subject full \
-  -i T1_AXIAL_PRE_20101021132605_4.nii.gz \
-  -T2 T2_AXIAL_RESTORE_20101021132605_3.nii.gz \
-  -FLAIR FLAIR_AXIAL_20101021132605_5.nii.gz \
-  -T2pial -all
+   -i T1_AXIAL_PRE_20101021132605_4.nii.gz \
+   -T2 T2_AXIAL_RESTORE_20101021132605_3.nii.gz \
+   -FLAIR FLAIR_AXIAL_20101021132605_5.nii.gz \
+   -T2pial -all -openmp 32 -time -log logfile -nuintensitycor-3T
 ```
 
 Adding to an existing model:
