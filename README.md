@@ -42,33 +42,43 @@ Assuming that you have your structural image in NIfTI format, run the following 
 ```bash
 mkdir -p $SUBJECTS_DIR/${subject}/mri/orig
 mri_convert ${subjT1} $SUBJECTS_DIR/${subject}/mri/orig/001.mgz
-recon-all -openmp 32 -subjid ${subject} -all -time -log logfile -nuintensitycor-3T -sd $SUBJECTS_DIR
+recon-all -openmp $(grep -c ^processor /proc/cpuinfo) \
+   -subjid ${subject} -all -time -log logfile -nuintensitycor-3T -sd $SUBJECTS_DIR
 ```
 
 **Note:** This step might take some time. Between 6-18h. If you want to run ``recon-all`` in parallel and speed-up the whole process, add `` -openmp N`` to the end of the ``recon-all`` command, where ``N`` stands for the number of CPUs to use.
 
 ### Improving model with T2 or FLAIR 
 
-If you have T2 or FLAIR MRI data you can improve the model surfaces by supplementing with [T2 or FLAIR data](https://surfer.nmr.mgh.harvard.edu/fswiki/recon-all#UsingT2orFLAIRdatatoimprovepialsurfaces)
+If you have T2 or FLAIR MRI data you can improve the model surfaces by supplementing with them per: [T2 or FLAIR data](https://surfer.nmr.mgh.harvard.edu/fswiki/recon-all#UsingT2orFLAIRdatatoimprovepialsurfaces)
 
 ```
 recon-all -subject ${subject} \
-   -i T1_AXIAL_PRE_20101021132605_4.nii.gz \
-   -T2 T2_AXIAL_RESTORE_20101021132605_3.nii.gz \
-   -FLAIR FLAIR_AXIAL_20101021132605_5.nii.gz \
-   -FLAIRpial -all -openmp 32 -time -log logfile -nuintensitycor-3T
+   -i T1.nii.gz \
+   -T2 T2.nii.gz \
+   -FLAIR FLAIR.nii.gz \
+   -FLAIRpial -all -openmp $(grep -c ^processor /proc/cpuinfo) \
+   -time -log logfile -nuintensitycor-3T
 ```
 * Adding FLAIR data to an existing model:
 
 ```
-recon-all -openmp 32 -subject ${subject} -FLAIR FLAIR_AXIAL_20101021132605_5.nii.gz -FLAIRpial -autorecon3
+recon-all -openmp $(grep -c ^processor /proc/cpuinfo) \
+   -subject ${subject} \
+   -FLAIR FLAIR_AXIAL_20101021132605_5.nii.gz \
+   -FLAIRpial \
+   -autorecon3
 ```
 
 
 * Adding T2 data to an existing model:
 
 ```
-recon-all -openmp 32 -subject ${subject} -T2 T2_AXIAL_RESTORE_20101021132605_3.nii.gz -T2pial -autorecon3
+recon-all -openmp $(grep -c ^processor /proc/cpuinfo) \
+   -subject ${subject} \
+   -T2 T2_AXIAL_RESTORE_20101021132605_3.nii.gz \
+   -T2pial \
+   -autorecon3
 ```
 
 
