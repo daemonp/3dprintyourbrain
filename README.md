@@ -42,7 +42,7 @@ Assuming that you have your structural image in NIfTI format, run the following 
 ```bash
 mkdir -p $SUBJECTS_DIR/${subject}/mri/orig
 mri_convert ${subjT1} $SUBJECTS_DIR/${subject}/mri/orig/001.mgz
-recon-all -openmp $(grep -c ^processor /proc/cpuinfo) \
+recon-all -openmp $(nproc) \
    -subjid ${subject} -all -time -log logfile -nuintensitycor-3T -sd $SUBJECTS_DIR
 ```
 
@@ -52,18 +52,18 @@ recon-all -openmp $(grep -c ^processor /proc/cpuinfo) \
 
 If you have T2 or FLAIR MRI data you can improve the model surfaces by supplementing with them per: [T2 or FLAIR data](https://surfer.nmr.mgh.harvard.edu/fswiki/recon-all#UsingT2orFLAIRdatatoimprovepialsurfaces)
 
-```
+```bash
 recon-all -subject ${subject} \
    -i T1.nii.gz \
    -T2 T2.nii.gz \
    -FLAIR FLAIR.nii.gz \
-   -FLAIRpial -all -openmp $(grep -c ^processor /proc/cpuinfo) \
+   -FLAIRpial -all -openmp $(nproc) \
    -time -log logfile -nuintensitycor-3T
 ```
 * Adding FLAIR data to an existing model:
 
-```
-recon-all -openmp $(grep -c ^processor /proc/cpuinfo) \
+```bash
+recon-all -openmp $(nproc) \
    -subject ${subject} \
    -FLAIR FLAIR_AXIAL_20101021132605_5.nii.gz \
    -FLAIRpial \
@@ -73,8 +73,8 @@ recon-all -openmp $(grep -c ^processor /proc/cpuinfo) \
 
 * Adding T2 data to an existing model:
 
-```
-recon-all -openmp $(grep -c ^processor /proc/cpuinfo) \
+```bash
+recon-all -openmp $(nproc) \
    -subject ${subject} \
    -T2 T2_AXIAL_RESTORE_20101021132605_3.nii.gz \
    -T2pial \
