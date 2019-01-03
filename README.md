@@ -60,27 +60,7 @@ recon-all -subject ${subject} \
    -FLAIRpial -all -openmp $(nproc) \
    -time -log logfile -nuintensitycor-3T
 ```
-* Adding FLAIR data to an existing model:
-
-```bash
-recon-all -openmp $(nproc) \
-   -subject ${subject} \
-   -FLAIR FLAIR_AXIAL_20101021132605_5.nii.gz \
-   -FLAIRpial \
-   -autorecon3
-```
-
-
-* Adding T2 data to an existing model:
-
-```bash
-recon-all -openmp $(nproc) \
-   -subject ${subject} \
-   -T2 T2_AXIAL_RESTORE_20101021132605_3.nii.gz \
-   -T2pial \
-   -autorecon3
-```
-
+**Note:** In a small sample using FLAIR data improved the pial model more than T2
 
 ## Step 3 - Create 3D Model of Cortical Areas
 
